@@ -24,11 +24,13 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
             var configuration = builder.Build();
             var services = new ServiceCollection();
             
+            services.AddSingleton<DecisionMachineSettings>(configuration.GetSection(nameof(DecisionMachineSettings)).Get<DecisionMachineSettings>());
+
             //Falar sobre o configuration
             services.AddHttpClient<IDesicionMachineService, DesicionMachineService>(
                 client => {
-                    client.BaseAddress = new Uri(configuration["DecisionMachine:Url"]);
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ApiKey", configuration["DecisionMachine:ApiKey"]);
+                    client.BaseAddress = new Uri(configuration[$"{nameof(DecisionMachineSettings)}:Url"]);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ApiKey", configuration[$"{nameof(DecisionMachineSettings)}:ApiKey"]);
                 });
             
             return services.BuildServiceProvider();
@@ -38,8 +40,10 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
         public async Task DeveExecutarComandoPostAsync()
         {
              //given
-            var desicionMachineService = this.BuildServiceProvider()
-                                             .GetRequiredService<IDesicionMachineService>();
+            var provider = this.BuildServiceProvider();
+            var settings = provider.GetRequiredService<DecisionMachineSettings>();
+            var desicionMachineService = provider.GetRequiredService<IDesicionMachineService>();
+
             var data = new ExecutarPodeCadastrarModel();
             data.Documento = "604.926.888-69";
             data.Idade = 50;
@@ -47,7 +51,7 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
             data.SeedClientes();
 
             //when
-            var response = await desicionMachineService.PostAsync<ExecutarPodeCadastrarModel>(data, DesicionMachineService.Pode_Cadastrar_Url);
+            var response = await desicionMachineService.PostAsync<ExecutarPodeCadastrarModel>(data, settings.Rules.Pode_Cadastrar_Url);
             
             //then
             desicionMachineService.Should().NotBeNull();
@@ -59,9 +63,11 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
         [Fact]
         public async Task DeveAprovarCadastro()
         {
-             //given
-            var desicionMachineService = this.BuildServiceProvider()
-                                          .GetRequiredService<IDesicionMachineService>();
+            //given
+            var provider = this.BuildServiceProvider();
+            var settings = provider.GetRequiredService<DecisionMachineSettings>();
+            var desicionMachineService = provider.GetRequiredService<IDesicionMachineService>();
+
             ExecutarPodeCadastrarModel data = new ExecutarPodeCadastrarModel();
             data.Documento = "604.926.888-69";
             data.Idade = 50;
@@ -69,7 +75,7 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
             data.SeedClientes();
 
             //when
-            var response = await desicionMachineService.PostAsync<ExecutarPodeCadastrarModel>(data, DesicionMachineService.Pode_Cadastrar_Url);
+            var response = await desicionMachineService.PostAsync<ExecutarPodeCadastrarModel>(data, settings.Rules.Pode_Cadastrar_Url);
             
             //then
             desicionMachineService.Should().NotBeNull();
@@ -85,9 +91,11 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
         [Fact]
         public async Task DeveNegarCadastro()
         {
-             //given
-            var desicionMachineService = this.BuildServiceProvider()
-                                          .GetRequiredService<IDesicionMachineService>();
+            //given
+            var provider = this.BuildServiceProvider();
+            var settings = provider.GetRequiredService<DecisionMachineSettings>();
+            var desicionMachineService = provider.GetRequiredService<IDesicionMachineService>();
+            
             ExecutarPodeCadastrarModel data = new ExecutarPodeCadastrarModel();
             data.Documento = "062.348.835-32";
             data.Idade = 48;
@@ -95,7 +103,7 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
             data.SeedClientes();
 
             //when
-            var response = await desicionMachineService.PostAsync<ExecutarPodeCadastrarModel>(data, DesicionMachineService.Pode_Cadastrar_Url);
+            var response = await desicionMachineService.PostAsync<ExecutarPodeCadastrarModel>(data, settings.Rules.Pode_Cadastrar_Url);
             
             //then
             desicionMachineService.Should().NotBeNull();

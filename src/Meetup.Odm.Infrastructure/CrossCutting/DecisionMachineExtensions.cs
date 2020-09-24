@@ -13,10 +13,12 @@ namespace Meetup.Odm.Infrastructure.CrossCutting
     {
         public static IServiceCollection AddDecisionMachine(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<DecisionMachineSettings>(configuration.GetSection(nameof(DecisionMachineSettings)).Get<DecisionMachineSettings>());
+
             services.AddHttpClient<IDesicionMachineService, DesicionMachineService>(
                 client => {
-                    client.BaseAddress = new Uri(configuration["DecisionMachine:Url"]);
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ApiKey", configuration["DecisionMachine:ApiKey"]);
+                    client.BaseAddress = new Uri(configuration[$"{nameof(DecisionMachineSettings)}:Url"]);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ApiKey", configuration[$"{nameof(DecisionMachineSettings)}:ApiKey"]);
                 })
                 .AddPolicyHandler(GetRetryPolicy());
 

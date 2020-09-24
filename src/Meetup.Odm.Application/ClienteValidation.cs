@@ -10,9 +10,11 @@ namespace Meetup.Odm.Application
     public class ClienteValidation : IClienteValidation
     {
         private readonly IDesicionMachineService _desicionMachineService;
+        private readonly DecisionMachineSettings _settings;
 
-        public ClienteValidation(IDesicionMachineService desicionMachineService)
+        public ClienteValidation(DecisionMachineSettings settings, IDesicionMachineService desicionMachineService)
         {
+            _settings = settings;
             _desicionMachineService = desicionMachineService;
         }
 
@@ -44,7 +46,7 @@ namespace Meetup.Odm.Application
                 }});
 
             //Executa a regra
-            var response = await _desicionMachineService.PostAsync<ClienteValidateModel>(data, DesicionMachineService.Pode_Cadastrar_Url);
+            var response = await _desicionMachineService.PostAsync<ClienteValidateModel>(data, _settings.Rules.Pode_Cadastrar_Url);
 
             return (response.Pode_Cadastrar.sucesso, response.Pode_Cadastrar.mensagens);
         }
