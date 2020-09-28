@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Meetup.Odm.Teste.Infrastructure.Common
 {
     public class ExecutarPodeCadastrarClienteModel
     {
-        //Falar sobre case sensitive
-        public string nome { get; set; }
-        public string documento { get; set; }
-        public int idade { get; set; }
+        [JsonProperty("nome")]
+        public string Nome { get; set; }
+
+        [JsonProperty("documento")]
+        public string Documento { get; set; }
+
+        [JsonProperty("idade")]
+        public int Idade { get; set; }
     }
 
     public class ExecutarPodeCadastrarModel
@@ -26,19 +31,19 @@ namespace Meetup.Odm.Teste.Infrastructure.Common
                 .AddRange(new List<ExecutarPodeCadastrarClienteModel> {
                     new ExecutarPodeCadastrarClienteModel
                     {     
-                        nome = "Mário Iago Pinto",
-                        documento="062.348.835-32",
-                        idade = 80
+                        Nome = "Mário Iago Pinto",
+                        Documento="062.348.835-32",
+                        Idade = 80
                     }, new ExecutarPodeCadastrarClienteModel
                     {     
-                        nome = "Severino Pedro Henrique Gustavo Carvalho",
-                        documento="297.271.542-04",
-                        idade = 65
+                        Nome = "Severino Pedro Henrique Gustavo Carvalho",
+                        Documento="297.271.542-04",
+                        Idade = 65
                     }, new ExecutarPodeCadastrarClienteModel
                     {     
-                        nome = "Alexandre Kauê Vinicius dos Santos",
-                        documento="142.901.132-73",
-                        idade = 59
+                        Nome = "Alexandre Kauê Vinicius dos Santos",
+                        Documento="142.901.132-73",
+                        Idade = 59
                     }});
 
             return ExecutarPodeCadastrarModel;
