@@ -48,7 +48,7 @@ namespace Meetup.Odm.Application
             //Executa a regra
             var response = await _desicionMachineService.PostAsync<ClienteValidateModel>(data, _settings.Rules.Pode_Cadastrar_Url);
 
-            return (response.Pode_Cadastrar.sucesso, response.Pode_Cadastrar.mensagens);
+            return (response.Pode_Cadastrar.Sucesso, response.Pode_Cadastrar.Mensagens);
         }
     }
 }

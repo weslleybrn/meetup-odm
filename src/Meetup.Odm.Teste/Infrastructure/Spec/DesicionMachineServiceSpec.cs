@@ -81,11 +81,11 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
             desicionMachineService.Should().NotBeNull();
             response.Should().NotBeNull();
             response.Should().BeOfType<PodeCadastrarRegra>();
-            response.__DecisionID__.Should().NotBeEmpty();
+            response.DecisionId.Should().NotBeEmpty();
             response.Pode_Cadastrar.Should().NotBeNull();
-            response.Pode_Cadastrar.sucesso.Should().BeTrue();
-            response.Pode_Cadastrar.mensagens.Any().Should().BeTrue();
-            response.Pode_Cadastrar.mensagens.Any(m => m.ToLower().Contains("pode ser")).Should().BeTrue();
+            response.Pode_Cadastrar.Sucesso.Should().BeTrue();
+            response.Pode_Cadastrar.Mensagens.Any().Should().BeTrue();
+            response.Pode_Cadastrar.Mensagens.Any(m => m.ToLower().Contains("pode ser")).Should().BeTrue();
         }
 
         [Fact]
@@ -109,11 +109,11 @@ namespace Meetup.Odm.Teste.Infrastructure.Spec
             desicionMachineService.Should().NotBeNull();
             response.Should().NotBeNull();
             response.Should().BeOfType<PodeCadastrarRegra>();
-            response.__DecisionID__.Should().NotBeEmpty();
+            response.DecisionId.Should().NotBeEmpty();
             response.Pode_Cadastrar.Should().NotBeNull();
-            response.Pode_Cadastrar.sucesso.Should().BeFalse();
-            response.Pode_Cadastrar.mensagens.Any().Should().BeTrue();
-            response.Pode_Cadastrar.mensagens.Any(m => m.ToLower().Contains("não")).Should().BeTrue();
+            response.Pode_Cadastrar.Sucesso.Should().BeFalse();
+            response.Pode_Cadastrar.Mensagens.Any().Should().BeTrue();
+            response.Pode_Cadastrar.Mensagens.Any(m => m.ToLower().Contains("não")).Should().BeTrue();
         }
 
     }
